@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hotel Management</title>
+    <!-- BOOTSTRAP STYLES-->
+    <link href="static/assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONTAWESOME STYLES-->
+    <link href="static/assets/css/font-awesome.css" rel="stylesheet" />
+    <!-- MORRIS CHART STYLES-->
+    <link
+      href="static/assets/js/morris/morris-0.4.3.min.css"
+      rel="stylesheet"
+    />
+    <!-- CUSTOM STYLES-->
+    <link href="static/assets/css/custom.css" rel="stylesheet" />
+    <!-- GOOGLE FONTS-->
+    <link
+      href="http://fonts.googleapis.com/css?family=Open+Sans"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <style>
+    .col-md-9 {
+        width: 100%;
+    }</style>
+  </head>
+  <body>
+    <div id="wrapper">
+      <nav
+        class="navbar navbar-default navbar-cls-top"
+        role="navigation"
+        style="margin-bottom: 0"
+      >
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".sidebar-collapse"
+          >
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+            <a class="navbar-brand" href="#">Admin</a>
+        </div>
+        <div
+          style="float: right;">
+          <a href="/logout" class="btn btn-danger square-btn-adjust">Logout</a>
+        </div>
+      </nav>
+      <!-- /. NAV TOP  -->
+      <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+          <ul class="nav" id="main-menu">
+          
+            <li>
+              <a  href="/dashboard"
+                ><i class="fa fa-dashboard fa-3x"></i> Dashboard</a
+              >
+            </li>
+            
+            <li>
+              <a href="/dashboard/rooms"
+                ><i class="fa fa-bars fa-3x"></i> Rooms</a
+              >
+            </li>
+            <li>
+              <a href="/dashboard/booking"
+                ><i class="fa fa-rocket fa-3x"></i> Booking</a
+              >
+            </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- /. NAV SIDE  -->
+      <div id="page-wrapper">
+        <div id="page-inner">
+          <div class="row">
+            <div class="col-md-12">
+          <h2>{{username}} Dashboard</h2>
+          <h5>Welcome {{username}} Dashboard</h5>
+            </div>
+          </div>
+          <!-- /. ROW  -->
+          <hr />
+          <div class="row">
+         
+            <div class="col-md-3 col-sm-6 col-xs-6">
+              <div class="panel panel-back noti-box">
+                <span class="icon-box bg-color-green set-icon">
+                  <i class="fa fa-bars"></i>
+                </span>
+                <div class="text-box">
+                  <p class="main-text">{{ total_room }} </p>
+                  <p class="text-muted">Rooms</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-6">
+              <div class="panel panel-back noti-box">
+                <span class="icon-box bg-color-blue set-icon">
+                  <i class="fa fa-rocket"></i>
+                </span>
+                <div class="text-box">
+                  <p class="main-text">{{ total_booking }}</p>
+                  <p class="text-muted">Total Booking</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-6">
+              <div class="panel panel-back noti-box">
+                <span class="icon-box bg-color-brown set-icon">
+                  <i class="fa fa-bell-o"></i>
+                </span>
+                <div class="text-box">
+                  <p class="main-text">{{ total_paid_invoices }}</p>
+                  <p class="text-muted">Paid Invoices</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+            <div class="col-md-9 col-sm-12 col-xs-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">Recent Bookings</div>
+                <div class="panel-body">
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                      <thead style="background-color: rgb(154, 205, 50)">
+                        <tr>
+                          <th>#</th>
+                          <th>Booking ID</th>
+                          <th>Room Number</th>
+                          <th>Room Type</th>
+                          <th>Guest Name</th>
+                          <th>Guest Email</th>
+                          <th>Guest Phone</th>
+                          <th>Check In Date</th>
+                          <th>Check Out Date</th>
+                          <th>Payment</th>
+                          <th>Payment Status</th>
+                        </tr>
+                      </thead>
+                      <tbody style="border-color:blue;">
+                        {% for booking in bookings %}
+                          <tr>
+                              <td>{{loop.index}}</td>
+                              <td>{{ booking.bookingId.S }}</td>
+                              <td>{{ booking.room_no.S }}</td>
+                              <td>{{ booking.roomType.S }}</td>
+                              <td>{{ booking.guestName.S }}</td>
+                              <td>{{ booking.guestEmail.S }}</td>
+                              <td>{{ booking.guestPhone.S }}</td>
+                              <td>{{ booking.checkInDate.S }}</td>
+                              <td>{{ booking.checkOutDate.S }}</td>
+                              <td>{{ booking.paymentAmount.S }}</td>
+                              {% if booking.paymentStatus.S == 'Paid' %}
+                                <td class="bg-success text-white">{{ booking.paymentStatus.S }}</td>
+                              {% else %}
+                                <td class="bg-danger text-white">{{ booking.paymentStatus.S }}</td>
+                              {% endif %}
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+          <!-- /. ROW  -->
+        </div>
+        <!-- /. PAGE INNER  -->
+      </div>
+      <!-- /. PAGE WRAPPER  -->
+    </div>
+    <!-- /. WRAPPER  -->
+    <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+    <!-- JQUERY SCRIPTS -->
+    <script src="static/assets/js/jquery-1.10.2.js"></script>
+    <!-- BOOTSTRAP SCRIPTS -->
+    <script src="static/assets/js/bootstrap.min.js"></script>
+    <!-- METISMENU SCRIPTS -->
+    <script src="static/assets/js/jquery.metisMenu.js"></script>
+    <!-- MORRIS CHART SCRIPTS -->
+    <script src="static/assets/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="static/assets/js/morris/morris.js"></script>
+    <!-- CUSTOM SCRIPTS -->
+    <script src="static/assets/js/custom.js"></script>
+  </body>
+</html>

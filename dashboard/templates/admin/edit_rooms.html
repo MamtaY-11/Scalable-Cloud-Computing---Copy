@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hotel Management</title>
+    <!-- BOOTSTRAP STYLES-->
+    <link href="static/assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONTAWESOME STYLES-->
+    <link href="static/assets/css/font-awesome.css" rel="stylesheet" />
+    <!-- MORRIS CHART STYLES-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link
+      href="static/assets/js/morris/morris-0.4.3.min.css"
+      rel="stylesheet"
+    />
+    <!-- CUSTOM STYLES-->
+    <link href="static/assets/css/custom.css" rel="stylesheet" />
+    <!-- GOOGLE FONTS-->
+    <link
+      href="http://fonts.googleapis.com/css?family=Open+Sans"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <style>
+    .col-md-9 {
+        width: 100%;
+    }</style>
+  </head>
+  <body>
+    <div id="wrapper">
+      <nav
+        class="navbar navbar-default navbar-cls-top"
+        role="navigation"
+        style="margin-bottom: 0"
+      >
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".sidebar-collapse"
+          >
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          {% if current_user_role == 'Manager' %}
+            <a class="navbar-brand" href="#">Manager</a>
+          {% else %}
+            <a class="navbar-brand" href="#">Admin</a>
+          {% endif %}
+        </div>
+        <div
+          style="float: right;">
+          <a href="/logout" class="btn btn-danger square-btn-adjust">Logout</a>
+        </div>
+      </nav>
+      <!-- /. NAV TOP  -->
+      <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+          <ul class="nav" id="main-menu">
+          
+            <li>
+              <a  href="/dashboard"
+                ><i class="fa fa-dashboard fa-3x"></i> Dashboard</a
+              >
+            </li>
+           
+            <li>
+              <a href="/dashboard/users"
+                ><i class="fa fa-user fa-3x"></i>User</a
+              >
+            </li>
+        
+            <li>
+              <a href="/dashboard/rooms"
+                ><i class="fa fa-bars fa-3x"></i> Rooms</a
+              >
+            </li>
+            <li>
+              <a href="/dashboard/booking"
+                ><i class="fa fa-rocket fa-3x"></i> Booking</a
+              >
+            </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- /. NAV SIDE  -->
+      <div id="page-wrapper">
+        <div id="page-inner">
+          <div class="row">
+            <div class="col-md-12">
+          <h2>Edit Rooms Dashboard</h2>
+            </div>
+          </div>
+          <!-- /. ROW  -->
+          <hr />
+          <div class="col-md-9 col-sm-12 col-xs-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">Edit Rooms Data </div>
+                <div class="panel-body">             
+                  <form action="/dashboard/rooms/edit?room_no={{room.room_no.S}}" method="post" enctype="multipart/form-data">
+                    <div class="form-row">
+                      <div class="form-group col-md-4">
+                        <label for="inputEmail4">Room Number</label>
+                        <input type="text" id="fname" name="room_no" required class="form-control" value="{{room.room_no.S}}" disabled>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label for="inputPassword4">Room type</label>
+                        <select class="form-control" aria-label="Default select example" name="room_type" id="roomTypeSelect">
+                          <option value="VIP">VIP</option>
+                          <option value="Simple">Simple</option>
+                        </select>
+                      </div>
+                      
+                      <script>
+                        const roomTypeSelect = document.getElementById('roomTypeSelect');
+                        const selectedRoomType = "{{room.room_type.S}}"; // This value should be replaced with the actual selected room type from your backend.
+                      
+                        // Loop through all the options in the select element and set the selected attribute on the matching one.
+                        for (let i = 0; i < roomTypeSelect.options.length; i++) {
+                          if (roomTypeSelect.options[i].value === selectedRoomType) {
+                            roomTypeSelect.options[i].selected = true;
+                          }
+                        }
+                      </script>
+                      
+                      <div class="form-group col-md-4">
+                        <label for="inputPassword4">No of Bed</label>
+                        <input type="number" class="form-control" id="no" required placeholder="09" name="no_of_bed" value="{{room.no_of_bed.S}}">
+                      </div> 
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-4">
+                        <label for="inputPassword4">Multi Select  Amenities</label>
+                        <select id="amenitiesSelect" class="form-control" name="amenities[]" value="{{room.amenities.S}}"
+                         aria-label="Select multiple amenities" multiple>
+                          <option value="Air Conditioning">Air Conditioning</option>
+                          <option value="Wi-Fi">Wi-Fi</option>
+                          <option value="Flat-screen TV">Flat-screen TV</option>
+                          <option value="Mini-fridge">Mini-fridge</option>
+                          <option value="In-room Safe">In-room Safe</option>
+                          <option value="Coffee Maker">Coffee Maker</option>
+                          <option value="Work Desk">Work Desk</option>
+                          <option value="Private Balcony">Private Balcony</option>
+                        </select>
+                      </div>
+                      
+                      <script>
+                        // jQuery code to enable multiple selections without Ctrl/Cmd key
+                        $(document).ready(function() {
+                          $('#amenitiesSelect').mousedown(function(e) {
+                            e.preventDefault();
+                        
+                            var select = this;
+                            var scroll = select.scrollTop;
+                        
+                            e.target.selected = !e.target.selected;
+                        
+                            setTimeout(function() {
+                              select.scrollTop = scroll;
+                            }, 0);
+                          });
+                        });
+                      </script>
+                      
+                      <div class="form-group col-md-4">
+                        <label for="inputPassword4">Room Available</label>
+                        <select class="form-control" aria-label="Default select example" name="availability" id="availabilitySelect">
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </div>
+                      
+                      <script>
+                        const availabilitySelect = document.getElementById('availabilitySelect');
+                        const selectedAvailability = "{{room.availability.S}}"; // This value should be replaced with the actual selected availability from your backend.
+                      
+                        // Loop through all the options in the select element and set the selected attribute on the matching one.
+                        for (let i = 0; i < availabilitySelect.options.length; i++) {
+                          if (availabilitySelect.options[i].value === selectedAvailability) {
+                            availabilitySelect.options[i].selected = true;
+                          }
+                        }
+                      </script>
+                      
+                      <div class="form-group col-md-4">
+                        <label for="inputEmail4">Price</label>
+                        <input type="number" id="fname" name="price" required class="form-control" placeholder="$" value="{{room.price.S}}">
+                      </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-4">
+                          <label for="inputEmail4">Room Description</label>
+                          <textarea type="text" name="description" class="form-control" placeholder="Room Description" >{{room.description.S}}</textarea>
+                        </div>
+                  </div> 
+                      </div>
+                    </div>
+                    
+                    <div  style="
+                    float: right;
+                    margin-top: 20px;
+                ">
+                    <button type="submit" class="btn btn-primary">Update Room</button>
+                    </div>
+                    <div  style="
+                    float: right;
+                    margin-top: 20px;
+                    margin-right: 10px;
+                ">
+                    <a href="/dashboard/rooms" class="btn btn-primary">Back</a>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+          <!-- /. ROW  -->
+          <hr />
+         
+          <!-- /. ROW  -->
+          
+           
+          </div>
+          </div>
+          <!-- /. ROW  -->
+        </div>
+        <!-- /. PAGE INNER  -->
+      </div>
+      <!-- /. PAGE WRAPPER  -->
+    </div>
+    <!-- /. WRAPPER  -->
+    <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+    <!-- JQUERY SCRIPTS -->
+    <script src="static/assets/js/jquery-1.10.2.js"></script>
+    <!-- BOOTSTRAP SCRIPTS -->
+    <script src="static/assets/js/bootstrap.min.js"></script>
+    <!-- METISMENU SCRIPTS -->
+    <script src="static/assets/js/jquery.metisMenu.js"></script>
+    <!-- MORRIS CHART SCRIPTS -->
+    <script src="static/assets/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="static/assets/js/morris/morris.js"></script>
+    <!-- CUSTOM SCRIPTS -->
+    <script src="static/assets/js/custom.js"></script>
+  </body>
+</html>
