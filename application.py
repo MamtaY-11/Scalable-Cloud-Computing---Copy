@@ -15,6 +15,10 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
 
+
+
+
+
 application = Flask(__name__)
 application.secret_key = "demo-dev"
 userTable = 'PalaceGardenLogin'
