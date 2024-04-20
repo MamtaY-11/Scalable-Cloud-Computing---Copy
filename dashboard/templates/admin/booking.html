@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hotel Management</title>
+  <!-- BOOTSTRAP STYLES-->
+  <link href="static/assets/css/bootstrap.css" rel="stylesheet" />
+  <!-- FONTAWESOME STYLES-->
+  <link href="static/assets/css/font-awesome.css" rel="stylesheet" />
+  <!-- MORRIS CHART STYLES-->
+  <link href="static/assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
+  <!-- CUSTOM STYLES-->
+  <link href="static/assets/css/custom.css" rel="stylesheet" />
+  <!-- Include jQuery library (place this in the <head> or before the closing </body> tag) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- GOOGLE FONTS-->
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />
+  <style>
+    .col-md-9 {
+      width: 100%;
+    }
+
+    .flash-message {
+      width: 100%;
+
+    }
+  </style>
+</head>
+
+<body>
+  <div id="wrapper">
+    <nav class="navbar navbar-default navbar-cls-top" role="navigation" style="margin-bottom: 0">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        {% if current_user_role == 'Manager' %}
+        <a class="navbar-brand" href="#">Manager</a>
+        {% else %}
+        <a class="navbar-brand" href="#">Admin</a>
+        {% endif %}
+      </div>
+      <div style="float: right;">
+        <a href="/logout" class="btn btn-danger square-btn-adjust">Logout</a>
+      </div>
+    </nav>
+    <!-- /. NAV TOP  -->
+    <nav class="navbar-default navbar-side" role="navigation">
+      <div class="sidebar-collapse">
+        <ul class="nav" id="main-menu">
+
+          <li>
+            <a href="/dashboard"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
+          </li>
+
+          <li>
+            <a href="/dashboard/rooms"><i class="fa fa-bars fa-3x"></i> Rooms</a>
+          </li>
+          <li>
+            <a href="/dashboard/booking"><i class="fa fa-rocket fa-3x"></i> Booking</a>
+          </li>
+        </ul>
+        </li>
+        </ul>
+        </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+      <div id="page-inner">
+        <div class="row">
+          <div class="col-md-12">
+
+            <h2>Booking Dashboard</h2>
+            <h5>Welcome {{current_user_role}} Dashboard</h5>
+          </div>
+        </div>
+        <hr>
+        <!-- Display flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="flash-message">
+          {% for category, message in messages %}
+          <div class="alert alert-{{category}}" role="alert">
+            {{message}}
+          </div>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        <div class="col-md-9 col-sm-12 col-xs-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">Add New Booking </div>
+            <div class="panel-body">
+              <form action="/dashboard/booking/add" method="post" enctype="multipart/form-data">
+                <div class="form-row">
+
+                  <div class="form-group col-md-4">
+                    <label for="inputPassword4">Room Number</label>
+                    <select class="form-control" aria-label="Default select example" id="select-room-no" name="room_no"
+                      required>
+                      <option value="">Select Room</option>
+                      {% for room in rooms %}
+                      <option value="{{room.room_no.S}}" roomType="{{room.room_type.S}}">{{room.room_no.S}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="inputPassword4">Room Type</label>
+                    <input type="text" id="room-type" required name="roomType" class="form-control"
+                      placeholder="Room type">
+
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="inputPassword4">Guest Name</label>
+                    <input type="text" id="username" required name="guestName" class="form-control"
+                      placeholder="Last name" minlength="3">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label for="inputPassword4">Guest Email</label>
+                    <input type="email" class="form-control" required id="email" placeholder="mamtarryadav@gmail.com"
+                      name="guestEmail">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="inputPassword4">Check In Date</label>
+                    <input type="date" class="form-control" name="checkInDate" id="exp_date" required />
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="inputPassword4">Check Out Date</label>
+                    <input type="date" class="form-control" name="checkOutDate" id="exp_date" required />
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label for="inputPassword4">Guest Phone</label>
+                    <input type="text" name="guestPhone" required class="form-control" id="price"
+                      placeholder="+9123334343" minlength="11">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="inputPassword4">Total Guests</label>
+                    <input type="number" class="form-control" name="totalGuests" placeholder="1" required />
+                  </div>
+
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label for="inputPassword4">Payment</label>
+                    <input type="number" class="form-control" name="paymentAmount" placeholder="$" required />
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label for="inputPassword4">Payment Status </label>
+                    <select class="form-control" aria-label="Default select example" name="paymentStatus" required>
+                      <option value="Unpaid">Unpaid</option>
+                      <option value="Paid">Paid</option>
+                    </select>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div style="
+                 float: right;
+                 margin-bottom: 20px;
+              ">
+            <button type="submit" class="btn btn-primary">Add Booking</button>
+          </div>
+          </form>
+        </div>
+        <hr />
+        <div class="col-md-9 col-sm-12 col-xs-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">Rooms Data </div>
+            <div class="panel-body">
+
+              <form action="/dashboard/booking/sort" method="post" enctype="multipart/form-data">
+
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label for="tableName">Table Name:</label>
+                    <input type="text" class="form-control" id="tableName" name="tableName" required><br><br>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="sortBy">Sort By:</label>
+                    <input type="text" class="form-control" id="sortBy" name="sortBy" required><br><br>
+                  </div>
+
+                <div class="form-group col-md-4">
+                  <label for="sortOrder">Sort Order:</label>
+                  <select id="sortOrder" class="form-control" name="sortOrder">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                  </select><br><br>
+                </div>
+                  <input type="submit" class="btn btn-primary" value="Submit">
+
+                  <!-- <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead style="background-color:yellowgreen">
+                    <tr>
+                       <th>#</th>
+                      <th>Booking ID</th>
+                      <th>Room Number</th>
+                      <th>Room Type</th>
+                      <th>Guest Name</th>
+                      <th>Guest Email</th>
+                      <th>Guest Phone</th>
+                      <th>Check In Date</th>
+                      <th>Check Out Date</th>
+                      <th>Total Guest</th>
+                      <th>Payment</th>
+                      <th>Payment Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for booking in bookings %}
+                      
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{ booking.bookingId.S }}</td>
+                            <td>{{ booking.room_no.S }}</td>
+                            <td>{{ booking.roomType.S }}</td>
+                            <td>{{ booking.guestName.S }}</td>
+                            <td>{{ booking.guestEmail.S }}</td>
+                            <td>{{ booking.guestPhone.S }}</td>
+                            <td>{{ booking.checkInDate.S }}</td>
+                            <td>{{ booking.checkOutDate.S }}</td>
+                            <td>{{ booking.totalGuests.S }}</td>
+                            <td>{{ booking.paymentAmount.S }}</td>
+                            {% if booking.paymentStatus.S == 'Paid' %}
+                              <td class="bg-success text-white">{{ booking.paymentStatus.S }}</td>
+                            {% else %}
+                              <td class="bg-danger text-white">{{ booking.paymentStatus.S }}</td>
+                            {% endif %}
+                            <td colspan="2"> 
+                                <a href="/dashboard/booking/edit?bookingId={{booking.bookingId.S}}" class="btn btn-success">Edit</a>
+                                <a href="/dashboard/booking/remove/{{booking.bookingId.S}}" class="btn btn-danger">Delete</a>
+                            </td>    
+                        </tr>
+                      {% endfor %}
+                  </tbody>
+                </table>
+              </div> -->
+
+
+                  <table class="table table-bordered table-hover">
+                    <thead style="background-color: rgb(154, 205, 50)">
+                      <tr>
+                        <th>#</th>
+                        <th>Booking ID</th>
+                        <th>Room Number</th>
+                        <th>Room Type</th>
+                        <th>Guest Name</th>
+                        <th>Guest Email</th>
+                        <th>Guest Phone</th>
+                        <th>Check In Date</th>
+                        <th>Check Out Date</th>
+                        <th>Total Guests</th>
+                        <th>Payment</th>
+                        <th>Payment Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for booking in bookings %}
+                      <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ booking.bookingId }}</td>
+                        <td>{{ booking.room_no }}</td>
+                        <td>{{ booking.roomType }}</td>
+                        <td>{{ booking.guestName }}</td>
+                        <td>{{ booking.guestEmail }}</td>
+                        <td>{{ booking.guestPhone }}</td>
+                        <td>{{ booking.checkInDate }}</td>
+                        <td>{{ booking.checkOutDate }}</td>
+                        <td>{{ booking.totalGuests }}</td>
+                        <td>{{ booking.paymentAmount }}</td>
+                        <td>
+                          {% if booking.paymentStatus == 'Paid' %}
+                          <span class="badge bg-success">{{ booking.paymentStatus }}</span>
+                          {% else %}
+                          <span class="badge bg-danger">{{ booking.paymentStatus }}</span>
+                          {% endif %}
+                        </td>
+                        <td>
+                          <a href="/dashboard/booking/edit?bookingId={{ booking.bookingId }}"
+                            class="btn btn-success">Edit</a>
+                          <a href="/dashboard/booking/remove/{{ booking.bookingId }}" class="btn btn-danger">Delete</a>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+          </div>
+        </div>
+        <hr />
+      </div>
+    </div>
+  </div>
+  </div>
+
+  </div>
+  <!-- /. WRAPPER  -->
+
+  <!-- Function to hide the flash message after a specified time (in milliseconds) -->
+  <script>
+    function hideFlashMessage() {
+      setTimeout(function () {
+        $('.flash-message').fadeOut();
+      }, 5000); // 5000 milliseconds (5 seconds) - adjust this value as needed
+    }
+
+    // Call the hideFlashMessage function when the page is ready
+    $(document).ready(function () {
+      hideFlashMessage();
+    });
+  </script>
+
+  <!-- Get Value of Room Type -->
+  <script>
+    const select_room = document.getElementById('select-room-no');
+    const room_type = document.getElementById('room-type');
+
+    // Event listener for the change event on the select element
+    select_room.addEventListener('change', function () {
+      console.log("SELECTED")
+      // Get the selected option value
+      const selected_room_no = select_room.value;
+      const selected_room_type = select_room.options[select_room.selectedIndex].getAttribute('roomType');
+      // Select Room Type
+      room_type.value = selected_room_type
+
+    });
+  </script>
+  <!-- JQUERY SCRIPTS -->
+  <script src="static/assets/js/jquery-1.10.2.js"></script>
+  <!-- BOOTSTRAP SCRIPTS -->
+  <script src="static/assets/js/bootstrap.min.js"></script>
+  <!-- METISMENU SCRIPTS -->
+  <script src="static/assets/js/jquery.metisMenu.js"></script>
+  <!-- MORRIS CHART SCRIPTS -->
+  <script src="static/assets/js/morris/raphael-2.1.0.min.js"></script>
+  <script src="static/assets/js/morris/morris.js"></script>
+  <!-- CUSTOM SCRIPTS -->
+  <script src="static/assets/js/custom.js"></script>
+</body>
+
+</html>
