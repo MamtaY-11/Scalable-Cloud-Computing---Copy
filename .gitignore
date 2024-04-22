@@ -1,1 +1,3 @@
-DynamoDBsetting.py
+# .gitignore
+demoMailFile.py
+DynamoDBsettings.py
