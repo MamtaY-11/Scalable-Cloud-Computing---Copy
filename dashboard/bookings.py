@@ -5,16 +5,26 @@ import os
 import requests
 
 # from database import dynamodb
+<<<<<<< HEAD
 from  PalaceGarden.hotel_manage.booking import Booking
 from PalaceGarden.hotel_manage.room import Room
 from PalaceGarden.DynamoDBsettings import dynamodb
+=======
+from hotel_manage.booking import Booking
+from hotel_manage.room import Room
+from DynamoDBsettings import dynamodb
+>>>>>>> dab37c022d0fffdccc0d6d09761c1bac4fd037bd
 booking_blueprint = Blueprint('booking', __name__, static_folder="static", template_folder="templates")
 
 #Initialize booking object
 tableName = 'PalaceGardenBooking'
 booking_obj = Booking(tableName)
 roomTableName = 'PalaceGardenRooms'
+<<<<<<< HEAD
 bucketName = "x22245855uploadimage"
+=======
+bucketName = "x22245855pploads3image"
+>>>>>>> dab37c022d0fffdccc0d6d09761c1bac4fd037bd
 room_obj = Room(roomTableName, bucketName)
 
 #Get all bookings
@@ -144,10 +154,14 @@ def sort():
             return jsonify({'message': 'Missing required parameters'}), 400
 
         # Construct the API URL with query parameters
+<<<<<<< HEAD
         #api_url = f'https://09q1ii462d.execute-api.eu-west-1.amazonaws.com/dev/x22245855SortingDemo?tableName={table_name}&sortBy={sort_key}&sortOrder={sort_order}'
 
         api_url = f'https://cbptrd6kif.execute-api.eu-west-1.amazonaws.com/default/x22245855Sorting?tableName={table_name}&sortBy={sort_key}&sortOrder={sort_order}'
 
+=======
+        api_url = f'https://09q1ii462d.execute-api.eu-west-1.amazonaws.com/dev/x22245855SortingDemo?tableName={table_name}&sortBy={sort_key}&sortOrder={sort_order}'
+>>>>>>> dab37c022d0fffdccc0d6d09761c1bac4fd037bd
 
         # Make a GET request to the API
         response = requests.get(api_url)

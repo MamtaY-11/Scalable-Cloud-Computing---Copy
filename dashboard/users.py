@@ -2,9 +2,15 @@ from flask import Blueprint, render_template, request, flash, redirect
 from flask_login import login_required, current_user
 import boto3
 
+<<<<<<< HEAD
 from PalaceGarden.statusCode import HTTP_200_OK, HTTP_201_CREATED
 from PalaceGarden.hotel_manage.user import User
 from PalaceGarden.DynamoDBsettings import dynamodb
+=======
+from statusCode import HTTP_200_OK, HTTP_201_CREATED
+from hotel_manage.user import User
+from DynamoDBsettings import dynamodb
+>>>>>>> dab37c022d0fffdccc0d6d09761c1bac4fd037bd
 
 
 user_blueprint = Blueprint('users', __name__, static_folder="static", template_folder="templates")
