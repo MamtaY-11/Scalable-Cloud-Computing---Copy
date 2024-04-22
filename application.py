@@ -175,10 +175,11 @@ def book_now():
                 "paymentAmount": request.form['paymentAmount']
             }
 
-            email_response = sendEmail(booking_details)
+            #email_response = sendEmail(booking_details)
             #if email_response['statusCode'] == 200:
             #print("EMAIL SENT: ", email_response)
-            flash('Thank you for booking, we will contact you soon!'.format(uuid), 'success')
+            #flash('Thank you for booking, we will contact you soon!'.format(uuid), 'success')
+            flash('Thank you for booking, we will contact you soon!', 'success')
             return redirect(f'/checkout?room_no={room_no}')
             # else:
             #     #flash('Sorry!, failed booking, please try again!', 'danger')
@@ -189,30 +190,6 @@ def book_now():
             return redirect(f'/checkout?room_no={room_no}')
 
 
-
-
-def sendEmail(bookingDetails):
-    try:
-        guest_name = bookingDetails['guestName']
-        room_number = bookingDetails['room_no']
-        message = Mail(
-            from_email='x22245855@student.ncirl.ie',
-            to_emails=[bookingDetails['guestEmail']],
-            subject='Booking Done Successfully Mail',
-          
-            plain_text_content = f"Hello {guest_name}, your booking is done. Your room number is {room_number}." 
-           )
-
-        sg = SendGridAPIClient(SENDGRID_API_KEY)
-        response = sg.send(message)
-
-        print("SendGrid Response:", response.status_code)  # Debug print
-
-        return response
-
-    except Exception as e:
-        print("Error sending email:", str(e))  # Debug print
-        return str(e)
 
 
 
