@@ -12,8 +12,6 @@ from PalaceGarden.dashboard.rooms import room_blueprint
 from PalaceGarden.dashboard.bookings import booking_blueprint
 from DynamoDBsettings import dynamodb
 # from DynamoDBsettings import sns
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
 
 
 
