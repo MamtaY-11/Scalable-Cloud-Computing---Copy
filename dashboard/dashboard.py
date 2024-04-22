@@ -2,11 +2,11 @@ from flask import Blueprint, render_template, flash
 #import os
 #import boto3
 #from database import dynamodb
-from hotel_manage.booking import Booking
-from hotel_manage.room import Room
-from hotel_manage.user import User
+from PalaceGarden.hotel_manage.booking import Booking
+from PalaceGarden.hotel_manage.room import Room
+from PalaceGarden.hotel_manage.user import User
 from flask_login import login_required
-from DynamoDBsettings import dynamodb
+from PalaceGarden.DynamoDBsettings import dynamodb
 
 dashboard_blueprint = Blueprint('dashboard', __name__, static_folder="static", template_folder="templates")
 

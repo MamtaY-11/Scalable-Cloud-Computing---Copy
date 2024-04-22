@@ -14,7 +14,12 @@
       <meta name="description" content="">
       <meta name="author" content="Mamta">
       <!-- bootstrap css -->
-      <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
+      <!-- <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css"> -->
+      <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"> -->
+      <!-- <link rel="stylesheet" type="text/css" href="../PalaceGarden/static/css/bootstrap.min.css"> -->
+
+<link rel="stylesheet" text="text/css" href="static/css/bootstrap.min.css">
+
       <link rel="stylesheet" type="text/css" href="static/css/riban.css">
       <!-- style css -->
       <link rel="stylesheet" type="text/css" href="static/css/style.css">
@@ -215,14 +220,26 @@
       </div>
       <!-- copyright section end -->
       <!-- Javascript files-->
-      <script src="static/js/jquery.min.js"></script>
+      <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+      
+      <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/jquery-3.0.0.min.js') }}"></script>
+      
+      <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/plugin.js') }}"></script>
+
+      <script src="{{ url_for('static', filename='js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+      <!-- <script src="static/js/jquery.min.js"></script>
       <script src="static/js/popper.min.js"></script>
       <script src="static/js/bootstrap.bundle.min.js"></script>
       <script src="static/js/jquery-3.0.0.min.js"></script>
-      <script src="static/js/plugin.js"></script>
+      <script src="static/js/plugin.js"></script> -->
       <!-- sidebar -->
-      <script src="static/js/jquery.mCustomScrollbar.concat.min.js"></script>
-      <script src="static/js/custom.js"></script>
+      <!-- <script src="static/js/jquery.mCustomScrollbar.concat.min.js"></script>
+      <script src="static/js/custom.js"></script> -->
       <script>
          function openNav() {
            document.getElementById("mySidenav").style.width = "250px";

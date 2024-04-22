@@ -5,8 +5,8 @@ import os
 import ast
 import boto3
 from botocore.exceptions import ClientError
-from hotel_manage.room import Room
-from DynamoDBsettings import dynamodb,s3
+from PalaceGarden.hotel_manage.room import Room
+from PalaceGarden.DynamoDBsettings import dynamodb,s3
 import json
 from collections import OrderedDict
 # from database import dynamodb, s3
@@ -16,7 +16,7 @@ room_blueprint = Blueprint('room', __name__, static_folder="static", template_fo
 # Initialize class object
 tableName= 'PalaceGardenRooms'
 #room_obj = Room(tableName, os.environ['BUCKET_NAME'])
-room_obj = Room(tableName, "x22245855pploads3image")
+room_obj = Room(tableName, "x22245855uploadimage")
 
 # def json_serializable(obj):
 #     if isinstance(obj, datetime.date):

@@ -3,7 +3,7 @@ from datetime import datetime
 import ast
 class Room:
     tableName = 'PalaceGardenRooms'
-    bucketName = 'x22245855pploads3image'
+    bucketName = 'x22245855uploadimage'
     
     # Initialize the variables
     def __init__(self, tableName, bucketName):
@@ -30,10 +30,10 @@ class Room:
                 }
 
             # Upload the file to S3
-            s3.upload_fileobj(file, 'x22245855pploads3image', file.filename, ExtraArgs={'ACL': 'public-read'})
+            s3.upload_fileobj(file, 'x22245855uploadimage', file.filename, ExtraArgs={'ACL': 'public-read'})
 
             # Get the public URL of the uploaded file
-            public_url = f"https://{'x22245855pploads3image'}.s3.amazonaws.com/{file.filename}"
+            public_url = f"https://{'x22245855uploadimage'}.s3.amazonaws.com/{file.filename}"
             return {
                 "statusCode": 200,
                 "message": "File uploaded successfully!",

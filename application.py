@@ -1,14 +1,15 @@
 import ast
+import time
 from flask import Flask, Blueprint, jsonify, request, render_template, flash, redirect
 from flask_login import UserMixin, LoginManager, login_user, logout_user, current_user
 import requests
-from hotel_manage.booking import Booking
-from hotel_manage.room import Room
-from hotel_manage.user import User
-from dashboard.dashboard import dashboard_blueprint
-from dashboard.users import user_blueprint
-from dashboard.rooms import room_blueprint
-from dashboard.bookings import booking_blueprint
+from PalaceGarden.hotel_manage.booking import Booking
+from PalaceGarden.hotel_manage.room import Room
+from PalaceGarden.hotel_manage.user import User
+from PalaceGarden.dashboard.dashboard import dashboard_blueprint
+from PalaceGarden.dashboard.users import user_blueprint
+from PalaceGarden.dashboard.rooms import room_blueprint
+from PalaceGarden.dashboard.bookings import booking_blueprint
 from DynamoDBsettings import dynamodb
 # from DynamoDBsettings import sns
 from sendgrid import SendGridAPIClient
@@ -23,7 +24,7 @@ application = Flask(__name__)
 application.secret_key = "demo-dev"
 userTable = 'PalaceGardenLogin'
 user_obj = User(userTable)
-room_obj = Room("PalaceGardenRooms", "x22245855pploads3image")
+room_obj = Room("PalaceGardenRooms", "x22245855uploadimage")
 booking_obj = Booking("PalaceGardenBooking")
 topic_arn = 'arn:aws:sns:eu-west-1:250738637992:demo'
 # Register blueprints
@@ -50,7 +51,7 @@ class UserAuth(UserMixin):
 @application.route('/')
 def hello_world():
     all_rooms = room_obj.get_all_room(dynamodb)
-    # Convert the string amenities to list
+    #Convert the string amenities to list
     formated_all_room = []
     for room in all_rooms['data']['Items']:
         for key in room.keys():
@@ -125,7 +126,8 @@ def unauthorized():
 # Booking Room
 @application.route("/checkout", methods=['GET', 'POST'])
 def book_now():
-
+    uuid_generator = GetUUID() 
+    uuid = uuid_generator.get_uuid()
     # Get query parameter
     room_no = request.args.get('room_no')
     room = room_obj.get_room(dynamodb, room_no)
@@ -178,7 +180,7 @@ def book_now():
             email_response = sendEmail(booking_details)
             #if email_response['statusCode'] == 200:
             #print("EMAIL SENT: ", email_response)
-            flash('Thank you for booking, we will contact you soon!', 'success')
+            flash('Thank you for booking, we will contact you soon!'.format(uuid), 'success')
             return redirect(f'/checkout?room_no={room_no}')
             # else:
             #     #flash('Sorry!, failed booking, please try again!', 'danger')
@@ -321,7 +323,25 @@ def submit_sorting():
 
 
 
-
+def get_uuid(self):
+        api_url = "https://th6cjbtuee6ri6lkvmc6u7ipsq0qpkmk.lambda-url.us-west-2.on.aws/generateUUID"
+        try:
+            response = requests.get(api_url)
+            if(response.status_code == 200):
+                return response.text
+        except requests.exceptions.RequestException as e:
+            print(e)
+        return int(time.time() * 1000) - 1288834974657
+class GetUUID():
+    def get_uuid(self):
+        api_url = "https://th6cjbtuee6ri6lkvmc6u7ipsq0qpkmk.lambda-url.us-west-2.on.aws/generateUUID"
+        try:
+            response = requests.get(api_url)
+            if(response.status_code == 200):
+                return response.text
+        except requests.exceptions.RequestException as e:
+            print(e)
+        return int(time.time() * 1000) - 1288834974657
 
 
 
